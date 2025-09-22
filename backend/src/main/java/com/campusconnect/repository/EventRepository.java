@@ -226,4 +226,12 @@ public interface EventRepository extends JpaRepository<Event, Long> {
      * @return List of events with approaching registration deadline
      */
     List<Event> findByRegistrationDeadlineBetweenAndIsActive(LocalDateTime start, LocalDateTime deadline, Boolean isActive);
+
+    /**
+     * Find events by active status
+     * @param isActive the active status
+     * @param pageable pagination information
+     * @return Page of events with the specified active status
+     */
+    Page<Event> findByIsActive(Boolean isActive, Pageable pageable);
 }

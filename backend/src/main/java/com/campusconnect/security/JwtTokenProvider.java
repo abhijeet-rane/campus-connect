@@ -104,9 +104,8 @@ public class JwtTokenProvider {
         try {
             SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
             
-            Claims claims = Jwts.parserBuilder()
+            Claims claims = Jwts.parser()
                     .setSigningKey(key)
-                    .build()
                     .parseClaimsJws(token)
                     .getBody();
 
@@ -131,9 +130,8 @@ public class JwtTokenProvider {
         try {
             SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
             
-            Jwts.parserBuilder()
+            Jwts.parser()
                 .setSigningKey(key)
-                .build()
                 .parseClaimsJws(authToken);
             
             logger.debug("JWT token validation successful");
@@ -165,9 +163,8 @@ public class JwtTokenProvider {
         try {
             SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
             
-            Claims claims = Jwts.parserBuilder()
+            Claims claims = Jwts.parser()
                     .setSigningKey(key)
-                    .build()
                     .parseClaimsJws(token)
                     .getBody();
 

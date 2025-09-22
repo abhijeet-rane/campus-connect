@@ -28,7 +28,6 @@ export default function Login() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    role: "student" as "student" | "admin",
     rememberMe: false
   });
 
@@ -44,7 +43,7 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      await login(formData.email, formData.password, formData.role);
+      await login(formData.email, formData.password);
       toast({
         title: "Welcome back!",
         description: "You have successfully signed in.",
@@ -53,7 +52,7 @@ export default function Login() {
     } catch (error) {
       toast({
         title: "Sign in failed",
-        description: "Please check your credentials and try again.",
+        description: error instanceof Error ? error.message : "Please check your credentials and try again.",
         variant: "destructive",
       });
     } finally {
@@ -96,33 +95,13 @@ export default function Login() {
             {/* Login Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="role">Login As</Label>
-                <Select value={formData.role} onValueChange={(value: "student" | "admin") => handleInputChange("role", value)} required>
-                  <SelectTrigger>
-                    <div className="flex items-center gap-2">
-                      {formData.role === "admin" ? (
-                        <Shield className="h-4 w-4 text-muted-foreground" />
-                      ) : (
-                        <User className="h-4 w-4 text-muted-foreground" />
-                      )}
-                      <SelectValue placeholder="Select your role" />
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="student">Student</SelectItem>
-                    <SelectItem value="admin">Administrator</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
                 <Label htmlFor="email">Email Address</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="email"
                     type="email"
-                    placeholder={formData.role === "admin" ? "admin@campus.edu" : "your.email@university.edu"}
+                    placeholder="your.email@university.edu"
                     className="pl-9"
                     value={formData.email}
                     onChange={(e) => handleInputChange("email", e.target.value)}

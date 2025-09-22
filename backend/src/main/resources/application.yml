@@ -1,6 +1,6 @@
 # Campus Connect Backend Configuration
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${SERVER_PORT:8081}
   servlet:
     context-path: /api/v1
   error:
@@ -80,14 +80,14 @@ management:
   endpoints:
     web:
       exposure:
-        include: ${ACTUATOR_ENDPOINTS_ENABLED:true} && health,info,metrics,prometheus || health
+        include: ${ACTUATOR_ENDPOINTS:health,info,metrics}
   endpoint:
     health:
       show-details: when-authorized
   metrics:
     export:
       prometheus:
-        enabled: ${METRICS_ENABLED
+        enabled: ${METRICS_ENABLED:true}
 
 # API Documentation
 springdoc:
@@ -125,6 +125,11 @@ spring:
   config:
     activate:
       on-profile: dev
+  devtools:
+    restart:
+      enabled: false
+    livereload:
+      enabled: false
   jpa:
     show-sql: true
     hibernate:

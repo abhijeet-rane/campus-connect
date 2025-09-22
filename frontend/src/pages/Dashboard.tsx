@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
 import { Link } from "react-router-dom";
+import ApiHealthCheck from "@/components/ApiHealthCheck";
 import { 
   Calendar, 
   Lightbulb, 
@@ -90,6 +91,11 @@ export default function Dashboard() {
 
   return (
     <div className="container py-8">
+      {/* API Health Check */}
+      <div className="mb-6">
+        <ApiHealthCheck />
+      </div>
+
       {/* Welcome Section */}
       <div className="mb-8">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">

@@ -257,4 +257,12 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
      */
     @Query("SELECT DISTINCT skill FROM Project p JOIN p.requiredSkills skill WHERE p.isActive = :isActive")
     List<String> findAllRequiredSkills(@Param("isActive") Boolean isActive);
+
+    /**
+     * Find projects by active status
+     * @param isActive the active status
+     * @param pageable pagination information
+     * @return Page of projects with the specified active status
+     */
+    Page<Project> findByIsActive(Boolean isActive, Pageable pageable);
 }
