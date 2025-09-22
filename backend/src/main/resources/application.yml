@@ -1,6 +1,6 @@
 # Campus Connect Backend Configuration
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
   servlet:
     context-path: /api/v1
   error:
@@ -9,7 +9,7 @@ server:
 
 spring:
   application:
-    name: campus-connect-backend
+    name: ${APP_NAME:campus-connect-backend}
     
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
@@ -62,7 +62,7 @@ jwt:
 # Logging Configuration
 logging:
   level:
-    com.campusconnect: DEBUG
+    com.campusconnect: ${LOG_LEVEL:DEBUG}
     org.springframework.security: DEBUG
     org.springframework.web: INFO
     org.hibernate.SQL: DEBUG
@@ -71,7 +71,7 @@ logging:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
   file:
-    name: logs/campus-connect.log
+    name: ${LOG_FILE_PATH:logs/campus-connect.log}
     max-size: 10MB
     max-history: 30
 
@@ -80,14 +80,14 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics,prometheus
+        include: ${ACTUATOR_ENDPOINTS_ENABLED:true} && health,info,metrics,prometheus || health
   endpoint:
     health:
       show-details: when-authorized
   metrics:
     export:
       prometheus:
-        enabled: true
+        enabled: ${METRICS_ENABLED
 
 # API Documentation
 springdoc:
@@ -107,8 +107,8 @@ app:
     allow-credentials: true
     
   file-upload:
-    max-file-size: 10MB
-    max-request-size: 10MB
+    max-file-size: ${MAX_FILE_SIZE:10MB}
+    max-request-size: ${MAX_REQUEST_SIZE:10MB}
     upload-dir: ${UPLOAD_DIR:./uploads}
     
   pagination:
@@ -116,8 +116,8 @@ app:
     max-page-size: 100
     
   rate-limiting:
-    enabled: true
-    requests-per-minute: 100
+    enabled: ${RATE_LIMIT_ENABLED:true}
+    requests-per-minute: ${RATE_LIMIT_REQUESTS_PER_MINUTE:100}
 
 ---
 # Development Profile
