@@ -7,7 +7,6 @@ import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { authService } from "@/lib/api";
 import { 
   Mail, 
   Lock, 
@@ -64,26 +63,19 @@ export default function Signup() {
     setIsLoading(true);
 
     try {
-      const registerData = {
-        username: formData.email.split('@')[0], // Use email prefix as username
-        email: formData.email,
-        password: formData.password,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-      };
-
-      await authService.register(registerData);
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
       toast({
         title: "Account created successfully!",
-        description: "Welcome to Campus Connect. You are now signed in.",
+        description: "Welcome to Campus Connect. Please sign in to continue.",
       });
       
-      navigate('/dashboard');
+      navigate('/login');
     } catch (error) {
       toast({
         title: "Registration failed",
-        description: error instanceof Error ? error.message : "Something went wrong. Please try again.",
+        description: "Something went wrong. Please try again.",
         variant: "destructive",
       });
     } finally {

@@ -57,9 +57,15 @@ public class UserService {
                 logger.warn("Attempt to create user with existing email: {}", registrationRequest.getEmail());
                 throw new BadRequestException("User with this email already exists");
             }
+            
+            if (userRepository.existsByUsername(registrationRequest.getUsername())) {
+                logger.warn("Attempt to create user with existing username: {}", registrationRequest.getUsername());
+                throw new BadRequestException("User with this username already exists");
+            }
 
             // Create new user entity
             User user = new User();
+            user.setUsername(registrationRequest.getUsername());
             user.setEmail(registrationRequest.getEmail());
             user.setPasswordHash(passwordEncoder.encode(registrationRequest.getPassword()));
             user.setFirstName(registrationRequest.getFirstName());

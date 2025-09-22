@@ -30,29 +30,40 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     /**
-     * Load user by username (email in our case)
-     * @param email the user's email
+     * Load user by username (supports both email and username)
+     * @param usernameOrEmail the user's username or email
      * @return UserDetails implementation
      * @throws UsernameNotFoundException if user not found
      */
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        logger.debug("Loading user by email: {}", email);
+    public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
+        logger.debug("Loading user by username or email: {}", usernameOrEmail);
         
         try {
-            User user = userRepository.findByEmail(email)
-                    .orElseThrow(() -> {
-                        logger.warn("User not found with email: {}", email);
-                        return new UsernameNotFoundException("User not found with email: " + email);
-                    });
+            User user = null;
+            
+            // Try to find by email first
+            if (usernameOrEmail.contains("@")) {
+                user = userRepository.findByEmail(usernameOrEmail).orElse(null);
+            }
+            
+            // If not found by email, try by username
+            if (user == null) {
+                user = userRepository.findByUsername(usernameOrEmail).orElse(null);
+            }
+            
+            if (user == null) {
+                logger.warn("User not found with username or email: {}", usernameOrEmail);
+                throw new UsernameNotFoundException("User not found with username or email: " + usernameOrEmail);
+            }
 
             if (!user.getIsActive()) {
                 logger.warn("Attempt to load inactive user: {}", email);
                 throw new UsernameNotFoundException("User account is inactive: " + email);
             }
 
-            logger.debug("Successfully loaded user: {} with role: {}", email, user.getRole());
+            logger.debug("Successfully loaded user: {} with role: {}", usernameOrEmail, user.getRole());
             return UserPrincipal.create(user);
             
         } catch (UsernameNotFoundException e) {
